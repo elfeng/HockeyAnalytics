@@ -1,6 +1,7 @@
 #file to import and parse Canucks data and iterate through to identify entry attempts
 import pandas as pd
 import numpy as np
+import entry
 
 #import Canucks data and parse into data frame
 originDataFrame = pd.read_csv('CanucksFullData.csv')
