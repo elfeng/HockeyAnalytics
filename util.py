@@ -2,7 +2,7 @@ import entry.py
 
 
 def mapEntry(entry, index):
-	
+
 	#set initiating_player
 	player_name = originDataFrame.loc[i, player]
 	entry.initiating_player(player_name);
@@ -24,7 +24,7 @@ def mapEntry(entry, index):
 				entry.coords = temp_list
 				return
 			#puck exits zone
-			if currentX < 125 && beenInZone == 1:
+			if currentX < 125 and beenInZone == 1:
 				#stop entry, save tracked coordinates
 				entry.coords = temp_list
 				endTime = originDataFrame.loc[i, 'clock']
@@ -35,7 +35,7 @@ def mapEntry(entry, index):
 					entry.success = True
 					return
 			#puck remains zone 
-			if currentX > 125 && inZone == 1:
+			if currentX > 125 and inZone == 1:
 				beenInZone = 1
 				continue				
 			#puck enters zone 
