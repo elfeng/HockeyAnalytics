@@ -20,8 +20,8 @@ listOfEntries = []
 def mapEntry(entry, index):
 
 	#set initiating_player
-	player_name = originDataFrame.loc[i, player]
-	entry.initiating_player(player_name);
+	player_name = originDataFrame.loc[index, 'player']
+	entry.initiate_player(player_name);
 
 	#track coordinates, determine when Entry ends by case
 	if entry.style == 'drop':
@@ -30,8 +30,10 @@ def mapEntry(entry, index):
 		inZone = 0
 		beenInZone = 0
 		for i in range(index+1, numberOfEvents):
-			currentX = originDataFrame.loc[i, 'x_coord_ft']
-			currentY = originDataFrame.loc[i, 'y_coord_ft']
+			currentXstr = str(originDataFrame.loc[i, 'x_coord_ft'])
+			currentYstr = str(originDataFrame.loc[i, 'y_coord_ft'])
+			currentX = int(currentXstr)
+			currentY = int(currentYstr)
 			#track coordinates
 			temp_list.append([currentX, currentY])
 			#check fail entry
@@ -45,7 +47,7 @@ def mapEntry(entry, index):
 				entry.coords = temp_list
 				endTime = originDataFrame.loc[i, 'clock']
 				#update time for entry
-				entry.setTime(startTime, endTime, entry)
+				setTime(startTime, endTime, entry)
 				#update entry success
 				if entry.time_in_zone >= 10:
 					entry.success = True
@@ -61,7 +63,7 @@ def mapEntry(entry, index):
 #function to iterate through events, identify and create list of entry attempts
 def findEntries():
     i = 1
-    while i < 100 :
+    while i < 1000 :
         currentX = originDataFrame.loc[i, 'x_coord_ft']
         previousX = originDataFrame.loc[i-1, 'x_coord_ft']
         #check if in neutral zone
