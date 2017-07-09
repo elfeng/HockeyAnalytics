@@ -60,6 +60,28 @@ def mapEntry(entry, index):
 			if currentX > 125:
 				inZone = 1
 				startTime = originDataFrame.loc[i, 'clock']
+
+    elif entry.style == 'dump':
+        temp_list = []
+        for i in range(index+1, numberOfEvents):
+            currentXstr = str(originDataFrame.loc[i, 'x_coord_ft'])
+            currentYstr = str(originDataFrame.loc[i, 'y_coord_ft'])
+            currentX = int(currentXstr)
+            currentY = int(currentYstr)
+            #track coordinates
+            temp_list.append([currentX, currentY])
+            #check stop entry
+            if currentX < 125:
+                #save tracked coordinates so far
+                entry.coords = temp_list
+                endTime = originDataFrame.loc[i, 'clock']
+                #update time for entry
+                setTime(startTime, endTime, entry)
+                #update entry success
+                if entry.time_in_zone >= 10:
+                    entry.success = True
+                return i
+
 #function to iterate through events, identify and create list of entry attempts
 def findEntries():
     i = 1
