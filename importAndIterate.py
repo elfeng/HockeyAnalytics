@@ -17,6 +17,7 @@ numberOfEvents = 432235
 dropPassThreshold = 10
 dumpThreshold = 30
 listOfEntries = []
+
 def mapEntry(entry, index):
 
 	#set initiating_player
@@ -36,11 +37,6 @@ def mapEntry(entry, index):
 			currentY = int(currentYstr)
 			#track coordinates
 			temp_list.append([currentX, currentY])
-			#check fail entry
-			if currentX < initialX:
-				#save tracked coordinates so far
-				entry.coords = temp_list
-				return i
 			#puck exits zone
 			if currentX < 125 and beenInZone == 1:
 				#stop entry, save tracked coordinates
@@ -52,6 +48,11 @@ def mapEntry(entry, index):
 				if entry.time_in_zone >= 10:
 					entry.success = True
 					return i
+			#check fail entry
+			if currentX < initialX:
+				#save tracked coordinates so far
+				entry.coords = temp_list
+				return i
 			#puck remains zone
 			if currentX > 125 and inZone == 1:
 				beenInZone = 1
@@ -60,32 +61,36 @@ def mapEntry(entry, index):
 			if currentX > 125:
 				inZone = 1
 				startTime = originDataFrame.loc[i, 'clock']
-
-    elif entry.style == 'dump':
-        temp_list = []
-        for i in range(index+1, numberOfEvents):
-            currentXstr = str(originDataFrame.loc[i, 'x_coord_ft'])
-            currentYstr = str(originDataFrame.loc[i, 'y_coord_ft'])
-            currentX = int(currentXstr)
-            currentY = int(currentYstr)
-            #track coordinates
-            temp_list.append([currentX, currentY])
-            #check stop entry
-            if currentX < 125:
-                #save tracked coordinates so far
-                entry.coords = temp_list
-                endTime = originDataFrame.loc[i, 'clock']
+	else:
+		temp_list = []
+		startTime = originDataFrame.loc[index, 'clock']
+		for i in range(index+1, numberOfEvents):
+			currentXstr = str(originDataFrame.loc[i, 'x_coord_ft'])
+			currentYstr = str(originDataFrame.loc[i, 'y_coord_ft'])
+			currentX = int(currentXstr)
+			currentY = int(currentYstr)
+			#track coordinates
+			temp_list.append([currentX, currentY])
+			#check stop entry
+			if currentX < 125: #flipped the inequality...I think this is right...
+    			#save tracked coordinates so far
+				entry.coords = temp_list
+				endTime = originDataFrame.loc[i, 'clock']
                 #update time for entry
-                setTime(startTime, endTime, entry)
+				setTime(startTime, endTime, entry)
                 #update entry success
-                if entry.time_in_zone >= 10:
-                    entry.success = True
-                return i
+				if entry.time_in_zone >= 10:
+					entry.success = True
+					return i
+			#added this to make sure it terminates properly, not sure if it is correct...
+				else:
+					entry.coords = temp_list
+					return i
 
 #function to iterate through events, identify and create list of entry attempts
 def findEntries():
     i = 1
-    while i < 1000 :
+    while i < numberOfEvents - 1:
         currentX = originDataFrame.loc[i, 'x_coord_ft']
         previousX = originDataFrame.loc[i-1, 'x_coord_ft']
         #check if in neutral zone
@@ -104,7 +109,7 @@ def findEntries():
                 newEntry = entry.Entry()
                 newEntry.add_style("dump")
                 #call function to fill in rest of entry, pass newEntry and index
-                i = i + 1 #insert function here
+                i = mapEntry(newEntry, i-1)
                 listOfEntries.append(newEntry)
                 continue
         i = i + 1
