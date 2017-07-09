@@ -36,7 +36,7 @@ def findEntries():
                 listOfEntries.append(newEntry)
                 continue
             #check for a dump and chase entry
-            elif currentX - previousX >= dumpThreshold:
+        elif currentX - previousX >= dumpThreshold and previousX <=150 and previousX >=125:
                 newEntry = entry.Entry()
                 newEntry.add_style("dump")
                 #call function to fill in rest of entry, pass newEntry and index
