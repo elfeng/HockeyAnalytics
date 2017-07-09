@@ -2,8 +2,8 @@ class Entry:
     entrycount = 0;
 
     def __init__(self):
-        self.count = entrycount
-        entrycount += 1
+        self.count = Entry.entrycount
+        Entry.entrycount += 1
         self.initiating_player = ""
         self.coords = []
         self.time_in_zone = 0
@@ -29,5 +29,5 @@ class Entry:
         return {"Entry %d" % self.count: {'style': self.style,
                                'success': self.success,
                                'initiating_player': self.initiating_player,
-                               'coords': self.coords
+                               'coords': self.coords,
                                'time_in_zone': self.time_in_zone}}
