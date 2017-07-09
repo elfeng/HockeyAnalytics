@@ -11,7 +11,7 @@ class Entry:
         self.success = False
 
     def initiate_player(self, name):
-        self.initiating_player = player
+        self.initiating_player = name
 
     def add_coords(self, coordinates):
         self.coords = coordinates
@@ -20,7 +20,7 @@ class Entry:
         self.time_in_zone = time
 
     def add_style(self, style_string):
-        self.style = style
+        self.style = style_string
 
     def set_success(self):
         self.success = True
